@@ -1,20 +1,20 @@
-[GDD](https://docs.google.com/document/d/18gyoUtC5aZrS9tlcMk4ktNpaUVSfr9G5uWjXz4wok-8/edit?usp=sharing)
+[GDD](https://docs.google.com/document/d/18gyoUtC5aZrS9tlcMk4ktNpaUVSfr9G5uWjXz4wok-8/edit?usp=sharing) <br>
 
-Designer: Alex, Shomu
-Sound 
-Modify GDD
-UI/UX
-Help Game Logic and Artwork Suggestions 
+Designer: Alex, Shomu <br>
+Sound  <br>
+Modify GDD <br>
+UI/UX <br>
+Help Game Logic and Artwork Suggestions <br>
 
-Programmer: Kenny
-Character Control
-Obstacle Generation
-Collision Detection
-Game Start
-Score
-Game Over
+Programmer: Kenny <br>
+Character Control <br>
+Obstacle Generation <br>
+Collision Detection <br>
+Game Start <br>
+Score <br>
+Game Over <br>
 
-Artist: Chris
-Character Design
-Background
-UI Button
+Artist: Chris <br>
+Character Design <br>
+Background <br>
+UI Button <br>

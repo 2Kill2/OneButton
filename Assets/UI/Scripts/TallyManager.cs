@@ -21,7 +21,7 @@ public class TallyManager : MonoBehaviour
     private void SpawnTally()
     {
         // spawns a new tally mark at the next position
-        Vector3 SpawnPos = 
+        //Vector3 SpawnPos = 
     }
 
 

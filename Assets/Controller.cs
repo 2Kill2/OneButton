@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class Controller : MonoBehaviour
 {
@@ -13,6 +14,12 @@ public class Controller : MonoBehaviour
     [SerializeField] GameObject e1;
     [SerializeField] GameObject e2;
     [SerializeField] GameObject e3;
+    [SerializeField] GameObject good;
+    [SerializeField] GameObject bad;
+
+    [SerializeField] GameObject gameOver;
+    [SerializeField] TextMeshProUGUI gameOverScore;
+    [SerializeField] TextMeshProUGUI gameOverTime;
 
     //text
     [SerializeField] TextMeshProUGUI order;
@@ -39,12 +46,21 @@ public class Controller : MonoBehaviour
     private bool canPour = true;
     private bool pouring = false;
 
+    //TIMER STUFF
+    public float StartTime = 60f;
+    private float CurrentTime;
+    public TextMeshProUGUI TimerText;
+    public bool TimerOn = false;
+
     void Start()
     {
         //setup game on start
         audioSource = GetComponent<AudioSource>();
         fillMask.transform.position = new Vector3(0.0f, -1.024f, 0.0f);
         SetGoal();
+        CurrentTime = StartTime;
+        TimerOn = true;
+        UpdateText();
     }
 
     void SetGoal()
@@ -77,6 +93,26 @@ public class Controller : MonoBehaviour
 
     void Update()
     {
+        //TIMER, too lazy to make it reference the other script, this is faster unfortunately
+        if (TimerOn)
+        {
+            if (CurrentTime > 0)
+            {
+                CurrentTime -= Time.deltaTime;
+                UpdateText();
+                //Debug.Log(CurrentTime);
+            }
+            else
+            {
+                CurrentTime = 0;
+                TimerOn = false;
+                Debug.Log("Time has run out!");
+                UpdateText();
+                GameOver();
+                //lose event
+            }
+        }
+
         if (Input.GetKey(KeyCode.Space))
         {
             if (canPour == true)
@@ -95,16 +131,15 @@ public class Controller : MonoBehaviour
                 if (poured < goal)
                 {
                     PourResult(false);
-                    //Debug.Log("FAILED");
                 }
                 else
                 {
                     PourResult(true);
-                    //Debug.Log("PASSED");
                 }
             }
             
         }
+        //Perfect fill sound plays
         if (order.text == filled.text)
         {
             audioSource.PlayOneShot(perfect);
@@ -117,15 +152,17 @@ public class Controller : MonoBehaviour
 
     void PourResult(bool result)
     {
-        if (result == true)
+        if (result == true && poured < 3.0f)
         {
             cupsCompleted += 1;
+            good.SetActive(true);
             audioSource.PlayOneShot(complete);
             score.text = cupsCompleted.ToString("0");
         }
         else
         {
             cupsFailed += 1;
+            bad.SetActive(true);
             //I don't care
             if (cupsFailed == 1)
             {
@@ -146,12 +183,34 @@ public class Controller : MonoBehaviour
         if (cupsFailed >= 3)
         {
             //fail
-            Debug.Log("GAME OVER");
+            TimerOn = false;
+            GameOver();
         }
         else
         {
-            SetGoal();
+            StartCoroutine(ShowResult()); 
         }
+    }
+
+    IEnumerator ShowResult()
+    {
+        yield return new WaitForSeconds(1);
+        SetGoal();
+        bad.SetActive(false);
+        good.SetActive(false);
+    }
+
+    private void GameOver()
+    {
+        gameOverScore.text = score.text;
+        gameOverTime.text = TimerText.text;
+        gameOver.gameObject.SetActive(true);
+        this.gameObject.SetActive(false);
+    }
+
+    private void UpdateText()
+    {
+        TimerText.text = CurrentTime.ToString("00");
     }
 
 }
